@@ -10,7 +10,7 @@ function Login() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = (values) => {
     axios
@@ -27,10 +27,10 @@ function Login() {
             );
             dispatch(authSlice.actions.setAccount(res.data.user));
             setLoading(false);
-            history.push("/");
+            navigate("/");
         })
         .catch((err) => {
-            setMessage(err.response.data.detail.toString());
+            setMessage(err.response.data.detail);
         });
     };
 
