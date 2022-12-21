@@ -12,9 +12,11 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authSlice from "./slices/auth";
+import customizationReducer from './customizationReducer';
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
+  customization: customizationReducer
 });
 
 const persistedReducer = persistReducer(
