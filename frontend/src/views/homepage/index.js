@@ -1,14 +1,22 @@
-// material-ui
-import { Typography } from '@mui/material';
-
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import { styled, useTheme } from '@mui/material/styles';
-import Header from 'layout/MainLayout/Header';
-import MinimalLayout from 'layout/MinimalLayout';
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery,Grid,Button } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
+// material-ui
+// import MainCard from 'ui-component/cards/MainCard';
+// import { styled } from '@mui/material/styles';
+import { Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Header from 'layout/MainLayout/Header';
+// import MinimalLayout from 'layout/MinimalLayout';
+import { 
+    AppBar, 
+    Box, 
+    // CssBaseline, 
+    Toolbar, 
+    // useMediaQuery,
+    // Grid,
+    Button 
+} from '@mui/material';
 
 
 // ==============================|| SAMPLE PAGE ||============================== //

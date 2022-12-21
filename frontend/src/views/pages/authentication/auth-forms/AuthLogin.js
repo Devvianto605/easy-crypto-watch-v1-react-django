@@ -1,29 +1,28 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { 
+    // useSelector, 
+    useDispatch } from 'react-redux';
+import { useNavigate } from "react-router";
+import axios from "axios";
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import { useNavigate } from "react-router";
-
 import {
     Box,
     Button,
-    Checkbox,
-    Divider,
+    // Checkbox,
+    // Divider,
     FormControl,
-    FormControlLabel,
+    // FormControlLabel,
     FormHelperText,
     Grid,
     IconButton,
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    Stack,
+    // Stack,
     Typography,
-    useMediaQuery
+    // useMediaQuery
 } from '@mui/material';
 
 // third party
@@ -33,15 +32,13 @@ import { Formik } from 'formik';
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import authSlice from "store/slices/auth";
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import Google from 'assets/images/icons/social-google.svg';
-
-import authSlice from "store/slices/auth";
-
+// import Google from 'assets/images/icons/social-google.svg';
 
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -49,17 +46,17 @@ import authSlice from "store/slices/auth";
 const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const customization = useSelector((state) => state.customization);
-    const [checked, setChecked] = useState(true);
-    const [loading, setLoading] = useState(false);
+    // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    // const customization = useSelector((state) => state.customization);
+    // const [checked, setChecked] = useState(true);
+    const [loading, setLoading] = useState(false); //Left for futher use.
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const googleHandler = async () => {
-        console.error('Login');
-    };
+    // const googleHandler = async () => {
+    //     console.error('Login');
+    // };
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {

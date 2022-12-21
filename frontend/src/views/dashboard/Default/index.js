@@ -12,7 +12,7 @@ import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
+// import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import authSlice from "store/slices/auth";
 import { useNavigate } from "react-router";
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 
 import Header from 'layout/MainLayout/Header';
 import MinimalLayout from 'layout/MinimalLayout';
+
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -34,7 +35,7 @@ const Dashboard = () => {
 
     const handleLogout = () => {
         dispatch(authSlice.actions.setLogout());
-        navigate("/login");
+        navigate("/auth/login");
     }
 
     return (
