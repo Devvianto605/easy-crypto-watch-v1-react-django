@@ -11,6 +11,7 @@ import AuthLogin from '../auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import MinimalLayout from 'layout/MinimalLayout';
+import config from 'config';
 
 // assets
 
@@ -31,7 +32,7 @@ const Login = () => {
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 1 }}>
-                                        <Link to="#">
+                                        <Link to={config.defaultPath}>
                                             <Logo />
                                         </Link>
                                     </Grid>
@@ -72,7 +73,7 @@ const Login = () => {
                                         <Grid item container direction="column" alignItems="center" xs={12}>
                                             <Typography
                                                 component={Link}
-                                                to="/pages/register/register3"
+                                                to="/auth/register"
                                                 variant="subtitle1"
                                                 sx={{ textDecoration: 'none' }}
                                             >

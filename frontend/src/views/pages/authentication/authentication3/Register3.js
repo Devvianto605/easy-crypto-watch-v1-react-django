@@ -10,6 +10,7 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import Logo from 'ui-component/Logo';
 import AuthRegister from '../auth-forms/AuthRegister';
 import AuthFooter from 'ui-component/cards/AuthFooter';
+import config from 'config';
 
 // assets
 
@@ -28,7 +29,7 @@ const Register = () => {
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#">
+                                        <Link to={config.defaultPath}>
                                             <Logo />
                                         </Link>
                                     </Grid>
@@ -83,7 +84,7 @@ const Register = () => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                    <AuthFooter />
+                    {/* <AuthFooter /> */}
                 </Grid>
             </Grid>
         </AuthWrapper1>

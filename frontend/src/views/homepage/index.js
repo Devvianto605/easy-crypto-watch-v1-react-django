@@ -7,6 +7,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Header from 'layout/MainLayout/Header';
+import { useNavigate } from 'react-router-dom';
 // import MinimalLayout from 'layout/MinimalLayout';
 import { 
     AppBar, 
@@ -23,6 +24,16 @@ import {
 
 const HomePage = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
+
+    const handleSignin = () => {
+        navigate("/auth/login");
+    }
+
+    const handleSignup = () => {
+        navigate("/auth/register");
+    }
+
     return (
     <>
         <Box sx={{ display: 'flex' }}>
@@ -48,14 +59,11 @@ const HomePage = () => {
 
                 }}>
                     <Typography variant="h1" align='center'>
-                        Create simple real-time crypto movement dashboard and share easily!
+                        Create simple real-time cryptocurrency tracking dashboard easily!
                     </Typography>
                     <Box sx={{ m: 18 }} />
                     <Typography variant="h3" align='center' >
-                        Create virtual wallet to track movement of crypto market and share to your friend or family 
-                    </Typography>
-                    <Typography variant="h3" align='center' >
-                        to help track your/their fund without having to risk any misclick!
+                        Create virtual wallet to track cryptocurrency without having to risk any misclick!
                     </Typography>
                     <Box sx={{ m: 10 }} />
                     <Box sx={{ mt: 2 }} textAlign='center'>
@@ -65,6 +73,7 @@ const HomePage = () => {
                                     type="submit"
                                     variant="contained"
                                     color="secondary"
+                                    onClick={handleSignin}
                                 >
                                     Sign in
                                 </Button>
@@ -78,6 +87,7 @@ const HomePage = () => {
                                     type="submit"
                                     variant="contained"
                                     color="secondary"
+                                    onClick={handleSignup}
                                 >
                                     Sign up
                                 </Button>
