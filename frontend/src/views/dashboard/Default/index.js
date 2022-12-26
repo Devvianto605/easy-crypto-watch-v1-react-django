@@ -13,7 +13,8 @@ import { Typography } from '@mui/material';
 import Header from 'layout/MainLayout/Header';
 import MinimalLayout from 'layout/MinimalLayout';
 import EditIcon from '@mui/icons-material/Edit';
-
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -22,8 +23,8 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const [isLoading, setLoading] = useState(true);
-    const [profile, setProfile] = useState([{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]);
-    const [market, setMarket] = useState([{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]);
+    const [profile, setProfile] = useState();
+    const [market, setMarket] = useState();
 
     const auth = useSelector((state) => state.auth);
     const furl = 'https://api.binance.com/api/v3/ticker/price';
@@ -37,7 +38,7 @@ const Dashboard = () => {
     const fetchData = () => {
         fetch(furl)
         .then((res) => res.json() )
-        .then((data) => setMarket(data.filter((i)=>(i.symbol===profile[0].symbol||i.symbol===profile[1].symbol))))
+        .then((data) => setMarket(data.filter((e => profile.find(obj => obj.symbol === e.symbol))))) //compare two array and select only common value
         }
             
 
@@ -50,6 +51,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchData();
+        console.log(profile,market)
         });
 
     const handleLogout = () => {
@@ -125,25 +127,39 @@ const Dashboard = () => {
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12}>
                         <Grid container spacing={gridSpacing}>
-                            
-                                {profile.map(i => {
+                                {(profile != null&& market != null) 
+                                ?
+                                profile.map(i => {
                                     return market.map(j => {
                                             if(j.symbol===i.symbol) {
                                                 return (
-                                                    <Grid item lg={4} md={6} sm={6} xs={12}>
-                                                        <Card sx={{border: 0, p: 5 ,bgcolor:'#e6b400'}}>
-                                                            <Box sx={{m:'3'}}>
+                                                    <Grid key={i.profile_id} item lg={4} md={6} sm={6} xs={12}>
+                                                        <Card key={i.profile_id} sx={{border: 0, p: 5 ,bgcolor:'#e6b400',minWidth: '220px'}}>
+                                                            <Box sx={{m:'3'}} key={i.profile_id} >
+                                                                
                                                                 <Typography variant="h4"sx={{marginBottom: '12px'}}>{i.name}</Typography>
                                                                 <Divider />
+                                                                <Box 
+                                                                    component="img"
+                                                                    sx={{
+                                                                        maxHeight:'55px',
+                                                                        marginTop: '6px'
+                                                                    }}
+                                                                    alt="Crypto-logo"
+                                                                    src={(i.symbol.slice(0, -4)=='SHIB')
+                                                                        ? "https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png"
+                                                                        : `https://cryptoicons.org/api/icon/${i.symbol.slice(0, -4).toLowerCase()}/55`
+                                                                        }
+                                                                />
                                                                 <Typography variant="h4"sx={{marginTop: '6px'}}>Symbol:</Typography>
-                                                                <Typography variant="h4">{i.symbol}</Typography>
+                                                                <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.symbol.slice(0, -4)}</Typography>
                                                                 <Divider />
                                                                 <Typography variant="h4"sx={{marginTop: '6px'}}>Amount held:</Typography>
                                                                 <Typography variant="h4">{i.amount}</Typography>
                                                                 <Typography variant="h4" >Market price:</Typography>
-                                                                <Typography variant="h4"sx={{marginBottom: '12px'}}>${j.price}</Typography>
+                                                                <Typography variant="h4"sx={{marginBottom: '12px'}}>{j.price} USD</Typography>
                                                                 <Divider />
-                                                                <Typography variant="h4" sx={{marginTop: '6px'}}>Value own:</Typography>
+                                                                <Typography variant="h4" sx={{marginTop: '6px'}}>Value owned:</Typography>
                                                                 <Typography variant="h4">${(j.price*i.amount).toFixed(2)}</Typography>
                                                             </Box>    
                                                         </Card>
@@ -154,10 +170,20 @@ const Dashboard = () => {
 
 
                                     })
-                                    })}
+                                    }
+                                    )
+                                :  
+                                <Backdrop
+                                        sx={{ color: '#e6b400', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                                        open={true}
+                                    >
+                                <CircularProgress color="secondary" />
+                              </Backdrop>
+                                }
+                
 
                                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                                        <Card sx={{border: 0, p: 2 ,bgcolor:'#e6b400'}}>
+                                        <Card sx={{border: 0, p: 2 ,bgcolor:'#e6b400',minWidth: '220px'}}>
                                             <Box textAlign='center' sx={{m:'3'}}>
                                                 <Button size="large" fullWidth onClick={handleEdit} disableElevation variant="contained" color="primary"sx={{ borderRadius: 4 }}>
                                                     <EditIcon/>

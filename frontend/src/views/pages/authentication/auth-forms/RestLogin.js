@@ -1,62 +1,87 @@
 import { useState } from 'react';
-import { 
-    // useSelector, 
-    useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router";
-import axios from "axios";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import {
     Box,
     Button,
-    // Checkbox,
-    // Divider,
+    Checkbox,
     FormControl,
-    // FormControlLabel,
+    FormControlLabel,
     FormHelperText,
-    Grid,
     IconButton,
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    // Stack,
-    Typography,
-    // useMediaQuery
+    Stack,
+    Typography
 } from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import axios from 'axios';
 
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
+
 import authSlice from "store/slices/auth";
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-// import Google from 'assets/images/icons/social-google.svg';
+// style constant
+const useStyles = makeStyles((theme) => ({
+    redButton: {
+        fontSize: '1rem',
+        fontWeight: 500,
+        backgroundColor: theme.palette.grey[50],
+        border: '1px solid',
+        borderColor: theme.palette.grey[100],
+        color: theme.palette.grey[700],
+        textTransform: 'none',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.light
+        },
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '0.875rem'
+        }
+    },
+    signDivider: {
+        flexGrow: 1
+    },
+    signText: {
+        cursor: 'unset',
+        margin: theme.spacing(2),
+        padding: '5px 56px',
+        borderColor: theme.palette.grey[100] + ' !important',
+        color: theme.palette.grey[900] + '!important',
+        fontWeight: 500
+    },
+    loginIcon: {
+        marginRight: '16px',
+        [theme.breakpoints.down('sm')]: {
+            marginRight: '8px'
+        }
+    },
+    loginInput: {
+        ...theme.typography.customInput
+    }
+}));
 
+//============================|| API JWT - LOGIN ||============================//
 
-// ============================|| FIREBASE - LOGIN ||============================ //
+const RestLogin = (props, { ...others }) => {
+    const classes = useStyles();
+    const dispatcher = useDispatch();
+    const navigater = useNavigate();
 
-const FirebaseLogin = ({ ...others }) => {
-    const theme = useTheme();
     const scriptedRef = useScriptRef();
-    // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    // const customization = useSelector((state) => state.customization);
-    // const [checked, setChecked] = useState(true);
-    const [loading, setLoading] = useState(false); //Left for futher use.
-    const [err, setErr] = useState('');
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    // const googleHandler = async () => {
-    //     console.error('Login');
-    // };
+    const [checked, setChecked] = useState(true);
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -69,96 +94,50 @@ const FirebaseLogin = ({ ...others }) => {
 
     return (
         <>
-            <Grid container direction="column" justifyContent="center" spacing={2}>
-                {/* <Grid item xs={12}>
-                    <AnimateButton>
-                        <Button
-                            disableElevation
-                            fullWidth
-                            onClick={googleHandler}
-                            size="large"
-                            variant="outlined"
-                            sx={{
-                                color: 'grey.700',
-                                backgroundColor: theme.palette.grey[50],
-                                borderColor: theme.palette.grey[100]
-                            }}
-                        >
-                            <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-                            </Box>
-                            Sign in with Google
-                        </Button>
-                    </AnimateButton>
-                </Grid>
-                <Grid item xs={12}>
-                    <Box
-                        sx={{
-                            alignItems: 'center',
-                            display: 'flex'
-                        }}
-                    >
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                cursor: 'unset',
-                                m: 2,
-                                py: 0.5,
-                                px: 7,
-                                borderColor: `${theme.palette.grey[100]} !important`,
-                                color: `${theme.palette.grey[900]}!important`,
-                                fontWeight: 500,
-                                borderRadius: `${customization.borderRadius}px`
-                            }}
-                            disableRipple
-                            disabled
-                        >
-                            OR
-                        </Button>
-
-                        <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-                    </Box>
-                </Grid> */}
-                <Grid item xs={12} container alignItems="center" justifyContent="center">
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">Sign in with Email address</Typography>
-                    </Box>
-                </Grid>
-            </Grid>
-
             <Formik
                 initialValues={{
-                    email: 'demo@easycw.info',
-                    password: 'demo1234',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         axios
                             .post(`${process.env.REACT_APP_API_URL}/auth/login/`, { 
                                 email: values.email , 
                                 password: values.password
                             })
-                            .then((res) => {
-                                dispatch(
-                                authSlice.actions.setAuthTokens({
-                                    token: res.data.access,
-                                    refreshToken: res.data.refresh,
-                                })
-                                );
-                                dispatch(authSlice.actions.setAccount(res.data.user));
-                                setLoading(false);
-                                navigate("/dashboard");
+                            .then(function (response) {
+                                if (response.data.success) {
+                                    console.log(response.data)
+                                    dispatcher(
+                                        authSlice.actions.setAuthTokens({
+                                            token: response.data.access,
+                                            refreshToken: response.data.refresh,
+                                        }));
+                                    dispatcher(
+                                        authSlice.actions.setAccount(response.data.user));
+                                    navigater("/dashboard");
+                                    }
+                                if (scriptedRef.current) {
+                                    setStatus({ success: true });
+                                    setSubmitting(false);
+                                } 
+                                else {
+                                    setStatus({ success: false });
+                                    setErrors({ submit: response.data.msg });
+                                    setSubmitting(false);
+                                }
                             })
-                            .catch(error => {
-                                setErr('Email or password is not correct!')
-                                })
+                            .catch(function (error) {
+                                setStatus({ success: false });
+                                setErrors({ submit: error.response.data.msg });
+                                setSubmitting(false);
+                            });
                     } catch (err) {
                         console.error(err);
                         if (scriptedRef.current) {
@@ -171,8 +150,8 @@ const FirebaseLogin = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} className={classes.loginInput}>
+                            <InputLabel htmlFor="outlined-adornment-email-login">Email</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
@@ -180,21 +159,22 @@ const FirebaseLogin = ({ ...others }) => {
                                 name="email"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                label="Email Address / Username"
-                                inputProps={{}}
+                                label="Email Address"
+                                inputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline
+                                    }
+                                }}
                             />
                             {touched.email && errors.email && (
                                 <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {errors.email}
+                                    {' '}
+                                    {errors.email}{' '}
                                 </FormHelperText>
                             )}
                         </FormControl>
 
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.password && errors.password)}
-                            sx={{ ...theme.typography.customInput }}
-                        >
+                        <FormControl fullWidth error={Boolean(touched.password && errors.password)} className={classes.loginInput}>
                             <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
@@ -210,22 +190,26 @@ const FirebaseLogin = ({ ...others }) => {
                                             onClick={handleClickShowPassword}
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
-                                            size="large"
                                         >
                                             {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
                                 label="Password"
-                                inputProps={{}}
+                                inputProps={{
+                                    classes: {
+                                        notchedOutline: classes.notchedOutline
+                                    }
+                                }}
                             />
                             {touched.password && errors.password && (
                                 <FormHelperText error id="standard-weight-helper-text-password-login">
-                                    {errors.password}
+                                    {' '}
+                                    {errors.password}{' '}
                                 </FormHelperText>
                             )}
                         </FormControl>
-                        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -237,18 +221,31 @@ const FirebaseLogin = ({ ...others }) => {
                                 }
                                 label="Remember me"
                             />
-                            <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+                            {/* <Typography
+                                variant="subtitle1"
+                                component={Link}
+                                to={props.login ? '/pages/forgot-password/forgot-password' + props.login : '#'}
+                                color="secondary"
+                                sx={{ textDecoration: 'none' }}
+                            >
                                 Forgot Password?
-                            </Typography>
-                        </Stack> */}
+                            </Typography> */}
+                        </Stack>
                         {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
+                            <Box
+                                sx={{
+                                    mt: 3
+                                }}
+                            >
                                 <FormHelperText error>{errors.submit}</FormHelperText>
                             </Box>
                         )}
 
-                        <Box sx={{ mt: 2 }}>
-                            <Typography sx={{color:'red',mb:'15px',fontSize:'15px'}}>{err}</Typography>
+                        <Box
+                            sx={{
+                                mt: 2
+                            }}
+                        >
                             <AnimateButton>
                                 <Button
                                     disableElevation
@@ -259,7 +256,7 @@ const FirebaseLogin = ({ ...others }) => {
                                     variant="contained"
                                     color="secondary"
                                 >
-                                    Sign in
+                                    Sign IN
                                 </Button>
                             </AnimateButton>
                         </Box>
@@ -270,4 +267,4 @@ const FirebaseLogin = ({ ...others }) => {
     );
 };
 
-export default FirebaseLogin;
+export default RestLogin;
