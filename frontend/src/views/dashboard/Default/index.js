@@ -21,18 +21,19 @@ import CircularProgress from '@mui/material/CircularProgress';
 const Dashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const auth = useSelector((state) => state.auth);
 
     const [isLoading, setLoading] = useState(true);
     const [profile, setProfile] = useState();
     const [market, setMarket] = useState();
     const [to, setTo] = useState();
 
-    const auth = useSelector((state) => state.auth);
+    
     const furl = 'https://api.binance.com/api/v3/ticker/price';
 
     const GetProfile = () => {
         axios
-            .get('http://127.0.0.1:8000/api/userProfile')
+            .get('http://127.0.0.1:5000/api/userProfile')
             .then((res) => setProfile( res.data.filter((i)=>i.user_id===auth.account.id )))
             }
 

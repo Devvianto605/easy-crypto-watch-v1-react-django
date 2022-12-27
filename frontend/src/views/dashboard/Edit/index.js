@@ -41,7 +41,7 @@ const Edit = () => {
 
     const GetProfile = () => {
         axios
-            .get('http://127.0.0.1:8000/api/userProfile')
+            .get('http://127.0.0.1:5000/api/userProfile')
             .then((res) => setProfile( res.data.filter((i)=>i.user_id===auth.account.id )))
             }
 
@@ -97,7 +97,7 @@ const Edit = () => {
         };
     
         axios
-          .post('http://localhost:8000/api/userProfile/', data)
+          .post('http://localhost:5000/api/userProfile/', data)
           .then((response) => {
             setNewProfile({
                 profile_id: response.data.profile_id,
@@ -196,7 +196,7 @@ const Edit = () => {
                                                                             <Box textAlign='center' sx={{m:'2'}}>
                                                                                 <Button size="large" onClick={ () => {
                                                                                         axios
-                                                                                          .delete(`http://localhost:8000/api/userProfile/${i.profile_id}/`)
+                                                                                          .delete(`http://localhost:5000/api/userProfile/${i.profile_id}/`)
                                                                                           .then(() => {
                                                                                             window.location.reload();
                                                                                           })
