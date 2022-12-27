@@ -6,6 +6,7 @@ class UserProfile(models.Model):
     user_id = models.IntegerField()
     name = models.CharField(max_length=20)
     symbol =  models.CharField(max_length=8)
+    to =  models.CharField(max_length=4)
     amount =  models.DecimalField(max_digits=18, decimal_places=6)
     
     def __str__(self):

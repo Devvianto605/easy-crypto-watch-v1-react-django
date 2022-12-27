@@ -92,9 +92,10 @@ const HomePage = () => {
                                     Sign up
                                 </Button>
                             </AnimateButton>
-                            
+                            <Box sx={{ m: 10 }} />
                         </Box>
                 </Box>
+                
         </Box>
     </>
 );

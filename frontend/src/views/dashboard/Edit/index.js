@@ -26,7 +26,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 const Edit = () => {
 
     const auth = useSelector((state) => state.auth);
-    const initialMenuState = { profile_id : null , user_id : auth.account.id , name : null , symbol : null,amount:null }
+    const initialMenuState = { profile_id : null , user_id : auth.account.id , name : 'BITCOIN' , symbol : 'BTC',to:'THB',amount:'0.014' }
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -35,8 +35,8 @@ const Edit = () => {
     const [profile, setProfile] = useState();
     const [market, setMarket] = useState();
     const [newProfile, setNewProfile] = useState(initialMenuState);
+    const [to, setTo] = useState();
 
-    
     const furl = 'https://api.binance.com/api/v3/ticker/price';
 
     const GetProfile = () => {
@@ -51,6 +51,11 @@ const Edit = () => {
         .then((data) => setMarket(data.filter((e => profile.find(obj => obj.symbol === e.symbol))))) //compare two array and select only common value
         }
             
+    const GetTo = () => {
+        fetch('https://api.exchangerate-api.com/v4/latest/usd')
+        .then((res) => res.json() )
+        .then((data) => setTo( data.rates))
+            }    
 
     useEffect(() => {
         GetProfile();
@@ -58,10 +63,15 @@ const Edit = () => {
         
             }, []);
 
+    useEffect(() => {
+        GetTo();
+            }, [market]);
 
     useEffect(() => {
         fetchData();
+        
         });
+        
 
     const handleLogout = () => {
         dispatch(authSlice.actions.setLogout());
@@ -82,6 +92,7 @@ const Edit = () => {
             user_id: auth.account.id,
             name: newProfile.name,
             symbol: newProfile.symbol.toUpperCase()+'USDT',
+            to: newProfile.to,
             amount: newProfile.amount,
         };
     
@@ -155,7 +166,7 @@ const Edit = () => {
                                                     <Grid item lg={4} md={6} sm={6} xs={12} key={i.profile_id}>
                                                         <Card key={i.profile_id} sx={{border: 0, pt: 5 , pr: 5 , pl: 5 ,bgcolor:'#e6b400'}}>
                                                             <Box sx={{m:'3'}} key={i.profile_id}>
-                                                                <Typography variant="h4"sx={{marginBottom: '12px'}}>{i.name}</Typography>
+                                                            <Typography variant="h4"sx={{marginBottom: '12px'}}>{i.name}</Typography>
                                                                 <Divider />
                                                                 <Box 
                                                                     component="img"
@@ -164,22 +175,22 @@ const Edit = () => {
                                                                         marginTop: '6px'
                                                                     }}
                                                                     alt="Crypto-logo"
-                                                                    src={(i.symbol.slice(0, -4)=='SHIB')
+                                                                    src={(i.symbol.slice(0, -4)==='SHIB')
                                                                         ? "https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png"
                                                                         : `https://cryptoicons.org/api/icon/${i.symbol.slice(0, -4).toLowerCase()}/55`
                                                                         }
                                                                 />
                                                                 <Typography variant="h4"sx={{marginTop: '6px'}}>Symbol:</Typography>
-                                                                <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.symbol.slice(0, -4)}</Typography>
+                                                                <Typography variant="h4">{i.symbol.slice(0, -4)}</Typography>
+                                                                
+                                                                <Typography variant="h4">Amount:</Typography>
+                                                                <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.amount} {i.symbol.slice(0, -4)}</Typography>
                                                                 <Divider />
-                                                                <Typography variant="h4"sx={{marginTop: '6px'}}>Amount held:</Typography>
-                                                                <Typography variant="h4">{i.amount} {i.symbol.slice(0, -4)}</Typography>
-                                                                <Typography variant="h4" >Market price:</Typography>
-                                                                <Typography variant="h4"sx={{marginBottom: '12px'}}>{j.price} USD</Typography>
+
+                                                                <Typography variant="h4"sx={{marginTop: '6px',marginBottom: '6px'}} > 1 {i.symbol.slice(0, -4)} = {(j.price*to[i.to]).toFixed(10)} {i.to}</Typography>
                                                                 <Divider />
-                                                                <Typography variant="h4" sx={{marginTop: '6px'}}>Value owned:</Typography>
-                                                                <Typography variant="h4" sx={{marginBottom: '12px'}} >${(j.price*i.amount).toFixed(2)}</Typography>
-                                                                <Divider />
+                                                                <Typography variant="h4" sx={{marginTop: '6px',marginTop: '6px'}}>Value owned:</Typography>
+                                                                <Typography variant="h4">{(j.price*i.amount*to[i.to]).toFixed(2)} {i.to}</Typography>
                                                                     <Grid item lg={12} md={12} sm={12} xs={12}>
                                                                         <Card sx={{border: 0, p: 2 ,bgcolor:'#e6b400'}}>
                                                                             <Box textAlign='center' sx={{m:'2'}}>
@@ -209,7 +220,7 @@ const Edit = () => {
 
                                     })
                                     })
-                                    :<Backdrop
+                                :<Backdrop
                                     sx={{ color: '#e6b400', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                                     open={true}
                                                 >
@@ -228,7 +239,6 @@ const Edit = () => {
                                                                     color="warning"
                                                                     focused
                                                                     fullWidth
-                                                                    defaultValue="BITCOIN"
                                                                     onChange={handleChange}
                                                                     name="name"
                                                                     value={newProfile.name}
@@ -242,7 +252,6 @@ const Edit = () => {
                                                                     color="warning"
                                                                     focused
                                                                     fullWidth
-                                                                    defaultValue="BTC"
                                                                     onChange={handleChange}
                                                                     name="symbol"
                                                                     value={newProfile.symbol}
@@ -255,10 +264,22 @@ const Edit = () => {
                                                                     color="warning"
                                                                     focused
                                                                     fullWidth
-                                                                    defaultValue="0.0014"
                                                                     onChange={handleChange}
                                                                     name="amount"
                                                                     value={newProfile.amount}
+                                                                    
+                                                                />
+
+                                                                <Divider />
+                                                                <TextField
+                                                                    label="Calculate to"
+                                                                    variant="standard"
+                                                                    color="warning"
+                                                                    focused
+                                                                    fullWidth
+                                                                    onChange={handleChange}
+                                                                    name="to"
+                                                                    value={newProfile.to}
                                                                     
                                                                 />
 

@@ -25,6 +25,7 @@ const Dashboard = () => {
     const [isLoading, setLoading] = useState(true);
     const [profile, setProfile] = useState();
     const [market, setMarket] = useState();
+    const [to, setTo] = useState();
 
     const auth = useSelector((state) => state.auth);
     const furl = 'https://api.binance.com/api/v3/ticker/price';
@@ -40,6 +41,12 @@ const Dashboard = () => {
         .then((res) => res.json() )
         .then((data) => setMarket(data.filter((e => profile.find(obj => obj.symbol === e.symbol))))) //compare two array and select only common value
         }
+    
+    const GetTo = () => {
+        fetch('https://api.exchangerate-api.com/v4/latest/usd')
+        .then((res) => res.json() )
+        .then((data) => setTo( data.rates))
+            }
             
 
     useEffect(() => {
@@ -51,7 +58,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchData();
-        console.log(profile,market)
+        GetTo();
         });
 
     const handleLogout = () => {
@@ -146,21 +153,22 @@ const Dashboard = () => {
                                                                         marginTop: '6px'
                                                                     }}
                                                                     alt="Crypto-logo"
-                                                                    src={(i.symbol.slice(0, -4)=='SHIB')
+                                                                    src={(i.symbol.slice(0, -4)==='SHIB')
                                                                         ? "https://s2.coinmarketcap.com/static/img/coins/64x64/5994.png"
                                                                         : `https://cryptoicons.org/api/icon/${i.symbol.slice(0, -4).toLowerCase()}/55`
                                                                         }
                                                                 />
                                                                 <Typography variant="h4"sx={{marginTop: '6px'}}>Symbol:</Typography>
-                                                                <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.symbol.slice(0, -4)}</Typography>
+                                                                <Typography variant="h4">{i.symbol.slice(0, -4)}</Typography>
+                                                                
+                                                                <Typography variant="h4">Amount:</Typography>
+                                                                <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.amount} {i.symbol.slice(0, -4)}</Typography>
                                                                 <Divider />
-                                                                <Typography variant="h4"sx={{marginTop: '6px'}}>Amount held:</Typography>
-                                                                <Typography variant="h4">{i.amount}</Typography>
-                                                                <Typography variant="h4" >Market price:</Typography>
-                                                                <Typography variant="h4"sx={{marginBottom: '12px'}}>{j.price} USD</Typography>
+
+                                                                <Typography variant="h4"sx={{marginTop: '6px',marginBottom: '6px'}} > 1 {i.symbol.slice(0, -4)} = {(j.price*to[i.to]).toFixed(10)} {i.to}</Typography>
                                                                 <Divider />
-                                                                <Typography variant="h4" sx={{marginTop: '6px'}}>Value owned:</Typography>
-                                                                <Typography variant="h4">${(j.price*i.amount).toFixed(2)}</Typography>
+                                                                <Typography variant="h4" sx={{marginTop: '6px',marginTop: '6px'}}>Value owned:</Typography>
+                                                                <Typography variant="h4">{(j.price*i.amount*to[i.to]).toFixed(2)} {i.to}</Typography>
                                                             </Box>    
                                                         </Card>
                                                     </Grid>
