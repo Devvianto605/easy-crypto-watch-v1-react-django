@@ -25,7 +25,7 @@ const Dashboard = () => {
 
     const [isLoading, setLoading] = useState(true);
     const [profile, setProfile] = useState();
-    const [market, setMarket] = useState();
+    const [market, setMarket] = useState([{"symbol":"ETHBTC","price":"0.07186000"}]);
     const [to, setTo] = useState();
 
     
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     const GetProfile = () => {
         axios
-            .get('http://127.0.0.1:5000/api/userProfile')
+            .get("http://52.76.71.228:5000/api/userProfile/")
             .then((res) => setProfile( res.data.filter((i)=>i.user_id===auth.account.id )))
             }
 
