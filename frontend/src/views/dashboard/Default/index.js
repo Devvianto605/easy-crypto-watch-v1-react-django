@@ -67,21 +67,6 @@ const Dashboard = () => {
         }
         } );
 
-        useEffect(() => {
-            if(count>0) {
-                fetchData();
-                GetTo();
-                setCount((prev)=>prev-1)
-                // console.log(count)
-                // console.log(to)
-            }
-            else {
-                    setInterval(() => {
-                        fetchData();
-                        console.log("1 sec lap")
-                }, 1000);}
-            });
-
     const handleLogout = () => {
         dispatch(authSlice.actions.setLogout());
         navigate("/auth/login");

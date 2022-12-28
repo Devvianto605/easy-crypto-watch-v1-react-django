@@ -31,11 +31,12 @@ const Edit = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [isLoading, setLoading] = useState(true);
+    // const [isLoading, setLoading] = useState(true);
     const [profile, setProfile] = useState();
     const [market, setMarket] = useState();
     const [newProfile, setNewProfile] = useState(initialMenuState);
     const [to, setTo] = useState();
+    const [count, setCount] = useState(30);
 
     const furl = 'https://api.binance.com/api/v3/ticker/price';
 
@@ -59,18 +60,19 @@ const Edit = () => {
 
     useEffect(() => {
         GetProfile();
-        setLoading(false);
+        // setLoading(false);
         
             }, []);
 
     useEffect(() => {
-        GetTo();
-            }, [market]);
-
-    useEffect(() => {
         fetchData();
-        
-        });
+        if(count>0) {
+            GetTo();
+            setCount((prev)=>prev-1)
+            // console.log(count)
+            // console.log(to)
+        }
+        } );
         
 
     const handleLogout = () => {
