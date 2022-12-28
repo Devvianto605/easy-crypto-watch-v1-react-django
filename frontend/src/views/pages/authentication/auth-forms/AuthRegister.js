@@ -161,7 +161,7 @@ const FirebaseRegister = ({ ...others }) => {
                             })
                             );
                             dispatch(authSlice.actions.setAccount(res.data.user));
-                            setLoading(false);
+                            // setLoading(false);
                             navigate("/dashboard");
                         })
                     } catch (err) {

@@ -49,7 +49,7 @@ const FirebaseLogin = ({ ...others }) => {
     // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     // const customization = useSelector((state) => state.customization);
     // const [checked, setChecked] = useState(true);
-    const [loading, setLoading] = useState(false); //Left for futher use.
+    // const [loading, setLoading] = useState(false); //Left for futher use.
     const [err, setErr] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -153,7 +153,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 })
                                 );
                                 dispatch(authSlice.actions.setAccount(res.data.user));
-                                setLoading(false);
+                                // setLoading(false);
                                 navigate("/dashboard");
                             })
                             .catch(error => {
