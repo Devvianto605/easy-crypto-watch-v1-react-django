@@ -8,7 +8,7 @@ const GuestGuard = () => {
 
     // If authorized, return an outlet that will render child elements
     // If not, return element that will navigate to login page
-    return auth.account ? <Outlet /> : <Navigate to="/auth/login" />;
+    return auth ? <Outlet /> : <Navigate to="/auth/login" />;
     
 }
 
