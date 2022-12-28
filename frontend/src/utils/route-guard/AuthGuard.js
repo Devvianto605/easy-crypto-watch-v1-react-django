@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 const AuthGuard = () => {
     // const auth = true; // determine if authorized, from context or however you're doing it
-    const auth = useSelector((state) => state.auth);
+    const auth = useSelector((state) => state.auth.token);
 
     // If authorized, return an outlet that will render child elements
     // If not, return element that will navigate to login page
