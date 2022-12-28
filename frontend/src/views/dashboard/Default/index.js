@@ -23,10 +23,12 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const auth = useSelector((state) => state.auth);
 
-    const [isLoading, setLoading] = useState(true);
+    // const [isLoading, setLoading] = useState(true);
     const [profile, setProfile] = useState();
-    const [market, setMarket] = useState([{"symbol":"ETHBTC","price":"0.07186000"}]);
+    const [market, setMarket] = useState();
     const [to, setTo] = useState();
+    const [count, setCount] = useState(30);
+
 
     
     const furl = 'https://api.binance.com/api/v3/ticker/price';
@@ -47,20 +49,38 @@ const Dashboard = () => {
         fetch('https://api.exchangerate-api.com/v4/latest/usd')
         .then((res) => res.json() )
         .then((data) => setTo( data.rates))
-            }
-            
+            }         
 
     useEffect(() => {
         GetProfile();
-        setLoading(false);
-        
+        // setLoading(false);
             }, []);
 
 
     useEffect(() => {
         fetchData();
-        GetTo();
-        });
+        if(count>0) {
+            GetTo();
+            setCount((prev)=>prev-1)
+            // console.log(count)
+            // console.log(to)
+        }
+        } );
+
+        useEffect(() => {
+            if(count>0) {
+                fetchData();
+                GetTo();
+                setCount((prev)=>prev-1)
+                // console.log(count)
+                // console.log(to)
+            }
+            else {
+                    setInterval(() => {
+                        fetchData();
+                        console.log("1 sec lap")
+                }, 1000);}
+            });
 
     const handleLogout = () => {
         dispatch(authSlice.actions.setLogout());
