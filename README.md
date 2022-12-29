@@ -1,1 +1,1 @@
-# easy-crypto-watch-app
+# Easy Crypto Watch Web-Application
