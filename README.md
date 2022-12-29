@@ -1,6 +1,6 @@
 # Easy Crypto Watch Web-Application
 
-![alt text](pmscreenshot.png)
+![alt text](ecwscreenshot.png)
 
 #### Video Demo: https://youtu.be/OKLvsc8Dm4w
 #### Live Demo: http://easycw.devvianto605.info/
