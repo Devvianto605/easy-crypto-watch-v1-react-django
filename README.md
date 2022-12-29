@@ -6,11 +6,7 @@
 
 Easy Crypto Watch Web-Application: The cryptocurrency tracking web-application using React along with Redux and Material ui as a frontend and Django Rest framwork as a backend.
 
-The idea is to create a simple cryptocurrency tracking app with user authentication that user can easily create and customize card's name, symbol and amount​then it calculate final value in US Dollar.
-
-It's consisted of Home page that link to Log in page and Sign up page and if you are authenticated it will relink you to dashboard of your cryptocurrency card and can customize it.
-
-This authentication process working by the use of React Axios library to post and catch information from React to specific path radianting by Django Rest API and then check if it valid or not.
+The idea is to create a simple cryptocurrency tracking app with user authentication that user can easily create and customize card's name, symbol and amount​then it calculate final value in US Dollar.It's consisted of Home page that link to Log in page and Sign up page and if you are authenticated it will relink you to dashboard of your cryptocurrency card and can customize it.This authentication process working by the use of React Axios library to post and catch information from React to specific path radianting by Django Rest API and then check if it valid or not.
 
 The dashboard's consisted of your created card arranging in grid with the informations (Name of card,symbol of a cryptocurrency,amount you own,market price of that cryptocurrency ,and final value of it)
 
