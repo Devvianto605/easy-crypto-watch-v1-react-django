@@ -1,6 +1,5 @@
 # Easy Crypto Watch Web-Application
 
-# Easy Crypto Watch Web-Application
 #### Video Demo: https://youtu.be/OKLvsc8Dm4w
 #### Description:
 
