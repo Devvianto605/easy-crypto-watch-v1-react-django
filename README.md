@@ -2,7 +2,7 @@
 
 ![alt text](ecwscreenshot.png)
 
-#### Video Demo: https://youtu.be/OKLvsc8Dm4w
+#### Video Demo: https://youtu.be/MipMnnN4jms
 #### Live Demo: http://easycw.devvianto605.info/
 - Frontend: React (Redux, Axios ,MUI)
 - Backend: Django (Restful APIs/Auth)
