@@ -1,6 +1,16 @@
 # Easy Crypto Watch Web-Application
 
+![alt text](pmscreenshot.png)
+
 #### Video Demo: https://youtu.be/OKLvsc8Dm4w
+#### Live Demo: http://easycw.devvianto605.info/
+- Frontend: React (Redux, Axios ,MUI)
+- Backend: Django (Restful APIs/Auth)
+- Database: Sqlite 
+ 
+** Live demo running on an AWS Lightsail instance free tier using Ubuntu OS: Gunicorn+NginX **
+
+
 #### Description:
 
 Easy Crypto Watch Web-Application: The cryptocurrency tracking web-application using React along with Redux and Material ui as a frontend and Django Rest framwork as a backend.
