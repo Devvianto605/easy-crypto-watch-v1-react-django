@@ -8,6 +8,7 @@
 - Backend: Django (Restful APIs/Auth)
 - Database: Sqlite 
  
+**Optimized for both desktop view and mobile view**
 ** Live demo running on an AWS Lightsail instance free tier using Ubuntu OS: Gunicorn+NginX **
 
 
