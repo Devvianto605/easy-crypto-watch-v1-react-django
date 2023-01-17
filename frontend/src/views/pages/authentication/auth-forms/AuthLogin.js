@@ -141,6 +141,7 @@ const FirebaseLogin = ({ ...others }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         axios
+                            // .post("http://localhost:5000/api/auth/login/", { 
                             .post("http://52.76.71.228:5000/api/auth/login/", { 
                                 email: values.email , 
                                 password: values.password

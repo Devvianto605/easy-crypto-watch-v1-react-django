@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useRef } from 'react';
 import axios from "axios";
 // material-ui
 import { Grid,Box,AppBar,Toolbar,Card,Divider,Button } from '@mui/material';
@@ -24,10 +24,12 @@ const Dashboard = () => {
     const auth = useSelector((state) => state.auth);
 
     // const [isLoading, setLoading] = useState(true);
-    const [profile, setProfile] = useState();
+    const [profile, setProfile] = useState([{}]);
     const [market, setMarket] = useState();
     const [to, setTo] = useState();
     const [count, setCount] = useState(30);
+    const [isPaused, setPause] = useState(false);
+    const ws = useRef(null);
 
 
     
@@ -35,15 +37,36 @@ const Dashboard = () => {
 
     const GetProfile = () => {
         axios
-            .get("http://52.76.71.228:5000/api/userProfile/")
+            .get("http://localhost:5000/api/userProfile/")
+            // .get("http://52.76.71.228:5000/api/userProfile/")
             .then((res) => setProfile( res.data.filter((i)=>i.user_id===auth.account.id )))
             }
+            
 
-    const fetchData = () => {
-        fetch(furl)
-        .then((res) => res.json() )
-        .then((data) => setMarket(data.filter((e => profile.find(obj => obj.symbol === e.symbol))))) //compare two array and select only common value
-        }
+    useEffect(() => {
+        ws.current = new WebSocket("wss://stream.binance.com:9443/ws/!miniTicker@arr");
+        ws.current.onopen = () => console.log("ws opened");
+        ws.current.onclose = () => console.log("ws closed");
+        const wsCurrent = ws.current;
+        return () => {
+            wsCurrent.close();
+        };
+    }, []);
+    useEffect(() => {
+        if (!ws.current) return;
+        ws.current.onmessage = e => {
+            const message = JSON.parse(e.data);
+            // console.log("e", message);
+            setMarket(message)
+        };
+    }, []);
+
+
+    // const fetchData = () => {
+    //     fetch(furl)
+    //     .then((res) => res.json() )
+    //     .then((data) => setMarket(data.filter((e => profile.find(obj => obj.symbol === e.symbol))))) //compare two array and select only common value
+    //     }
     
     const GetTo = () => {
         fetch('https://api.exchangerate-api.com/v4/latest/usd')
@@ -53,12 +76,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         GetProfile();
+        console.log(market)
         // setLoading(false);
             }, []);
 
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
         if(count>0) {
             GetTo();
             setCount((prev)=>prev-1)
@@ -144,7 +168,7 @@ const Dashboard = () => {
                                 ?
                                 profile.map(i => {
                                     return market.map(j => {
-                                            if(j.symbol===i.symbol) {
+                                            if(j.s===i.symbol) {
                                                 return (
                                                     <Grid key={i.profile_id} item lg={4} md={6} sm={6} xs={12}>
                                                         <Card key={i.profile_id} sx={{border: 0, p: 5 ,bgcolor:'#e6b400',minWidth: '220px'}}>
@@ -171,10 +195,10 @@ const Dashboard = () => {
                                                                 <Typography variant="h4"sx={{marginBottom: '6px'}}>{i.amount} {i.symbol.slice(0, -4)}</Typography>
                                                                 <Divider />
 
-                                                                <Typography variant="h4"sx={{marginTop: '6px',marginBottom: '6px'}} > 1 {i.symbol.slice(0, -4)} = {(j.price*to[i.to]).toFixed(10)} {i.to}</Typography>
+                                                                <Typography variant="h4"sx={{marginTop: '6px',marginBottom: '6px'}} > 1 {i.symbol.slice(0, -4)} = {(j.c*to[i.to]).toFixed(10)} {i.to}</Typography>
                                                                 <Divider />
                                                                 <Typography variant="h4" sx={{marginTop: '6px',marginTop: '6px'}}>Value owned:</Typography>
-                                                                <Typography variant="h4">{(j.price*i.amount*to[i.to]).toFixed(2)} {i.to}</Typography>
+                                                                <Typography variant="h4">{(j.c*i.amount*to[i.to]).toFixed(2)} {i.to}</Typography>
                                                             </Box>    
                                                         </Card>
                                                     </Grid>

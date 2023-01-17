@@ -148,6 +148,7 @@ const FirebaseRegister = ({ ...others }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         axios
+                        // .post("http://localhost:5000/api/auth/register/", { 
                         .post("http://52.76.71.228:5000/api/auth/register/", { 
                             username: values.username,
                             email: values.email , 
