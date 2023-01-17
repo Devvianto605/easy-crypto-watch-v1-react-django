@@ -33,6 +33,7 @@ Tools and libraries that used by this project:
 React: 
 -   Redux / Persist
 -   Axios
+-   Websocket
 -   Router
 -   Sass
 -   Formik
